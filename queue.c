@@ -113,8 +113,6 @@ bool q_insert_tail(queue_t *q, char *s)
     if (!newh)  // Return false if malloc fail;
         return false;
 
-    printf("1\n");
-
     // Allocate the space for the string, and then copy s into it
     s_size = strlen(s);
     newh->value = malloc(s_size + 1);  // "+1" is for the last charactor '\0'
