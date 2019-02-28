@@ -48,10 +48,28 @@ void q_free(queue_t *q)
 bool q_insert_head(queue_t *q, char *s)
 {
     list_ele_t *newh;
-    /* What should you do if the q is NULL? */
+    size_t s_size;
+
+    // Return false if q is NULL
+    if (!q)
+        return false;
+
+    // Allocate a new list_elet_t
     newh = malloc(sizeof(list_ele_t));
-    /* Don't forget to allocate space for the string and copy it */
-    /* What if either call to malloc returns NULL? */
+    if (!newh)  // Return false if malloc fail;
+        return false;
+
+    // Allocate the space for the string, and then copy s into it
+    s_size = strlen(s);
+    newh->value = malloc(s_size + 1);  // "+1" is for the last charactor '\0'
+    if (!newh->value) {
+        free(newh);
+        return false;
+    }
+    memcpy(newh->value, s, s_size);
+    newh->value[s_size] = 0;
+
+    // Insert the new list_ele_t into q
     newh->next = q->head;
     q->head = newh;
     return true;
