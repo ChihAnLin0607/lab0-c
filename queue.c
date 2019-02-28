@@ -27,6 +27,7 @@ queue_t *q_new()
     queue_t *q = malloc(sizeof(queue_t));
     /* What if malloc returned NULL? */
     q->head = NULL;
+    q->tail = NULL;
     return q;
 }
 
@@ -70,11 +71,12 @@ bool q_insert_head(queue_t *q, char *s)
     newh->value[s_size] = 0;
 
     // Insert the new list_ele_t into q
+    if (!q->head)
+        q->tail = newh;
     newh->next = q->head;
     q->head = newh;
     return true;
 }
-
 
 /*
   Attempt to insert element at tail of queue.
@@ -87,7 +89,39 @@ bool q_insert_tail(queue_t *q, char *s)
 {
     /* You need to write the complete code for this function */
     /* Remember: It should operate in O(1) time */
-    return false;
+
+    list_ele_t *newh;
+    size_t s_size;
+
+    // Return false if q is NULL
+    if (!q)
+        return false;
+
+    // Allocate a new list_elet_t
+    newh = malloc(sizeof(list_ele_t));
+    if (!newh)  // Return false if malloc fail;
+        return false;
+
+    printf("1\n");
+
+    // Allocate the space for the string, and then copy s into it
+    s_size = strlen(s);
+    newh->value = malloc(s_size + 1);  // "+1" is for the last charactor '\0'
+    if (!newh->value) {
+        free(newh);
+        return false;
+    }
+    memcpy(newh->value, s, s_size);
+    newh->value[s_size] = 0;
+
+    // Insert the new list_ele_t into q
+    if (!q->head)
+        q->head = newh;
+    if (q->tail)
+        q->tail->next = newh;
+    q->tail = newh;
+    newh->next = NULL;
+    return true;
 }
 
 /*
